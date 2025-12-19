@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9fafc 0%, #e5f0e7 100%);
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 38px auto;
+            background: #fffdf8;
+            box-shadow: 0 2px 18px 0 rgba(70,140,90,0.09);
+            border-radius: 25px;
+            padding: 40px 38px 32px 38px;
+        }
+        .alert {
+            background: #f8e9e1;
+            color: #b95337;
+            border: 1px solid #ffbfa8;
+            border-radius: 9px;
+            padding: 11px 9px;
+            font-size: 0.99rem;
+            text-align: center;
+            margin-top: 18px;
+            opacity: 1;
+            transition: opacity 0.7s;
+            pointer-events: none;
+            position: relative;
+            z-index: 33;
+        }
+        .alert.hide {
+            opacity: 0;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            background: #e0efe6;
+            border-radius:18px;
+            padding: 24px;
+            color: #375a40;
+        }
+        .hero-emoji {
+            font-size: 2.4rem;
+            margin-right: 18px;
+        }
+        h1 {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: 1.2px;
+        }
+        .dashboard-cards {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+        .card {
+            flex: 1 1 265px;
+            background: #f5faed;
+            border-radius: 17px;
+            box-shadow: 0 1px 8px rgba(120,183,160,0.07);
+            padding: 30px 22px 24px 22px;
+            text-align: center;
+        }
+        .card h3 {
+            margin-bottom: 17px;
+            color: #4b7f69;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .pie-section img {
+            display: block;
+            margin: 0 auto 6px auto;
+            max-width: 170px;
+            max-height: 170px;
+            border-radius: 60px;
+            box-shadow: 0 2px 8px 0 rgba(100,160,120,0.06);
+        }
+        .nav-buttons {
+            margin-top: 28px;
+            text-align: center;
+        }
+        .btn {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            border: none;
+            color: #245746;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 12px 36px;
+            border-radius: 27px;
+            margin: 6px 8px;
+            font-size: 1.1rem;
+            text-decoration: none;
+            box-shadow: 0 2px 7px 0 rgba(120,170,130,0.06);
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn:hover {
+            background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+            color: #184e3b;
+        }
+        .btn.logout {
+            background: linear-gradient(70deg, #f7c9a2 30%, #f788c8 110%);
+            color: #94485f;
+        }
+        .btn.logout:hover {
+            background: linear-gradient(65deg, #f7868f 40%, #fbeee1 130%);
+        }
+        .motivational {
+            font-style: italic;
+            color: #6e9d75;
+            font-size: 1.06rem;
+            margin: 0 0 6px 0;
+        }
+        @media (max-width: 980px) {
+            .dashboard-cards {
+                flex-direction: column;
+                gap: 18px;
+            }
+            .container {
+                padding: 17px 6vw 24px 6vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div id="flashbox" class="alert mt-2">
+              {% for msg in messages %}
+                {{ msg }}<br>
+              {% endfor %}
+            </div>
+            <script>
+                setTimeout(function() {
+                    var el = document.getElementById('flashbox');
+                    if (el) { el.classList.add('hide'); }
+                }, 2000);
+            </script>
+          {% endif %}
+        {% endwith %}
+
+        <div class="hero">
+            <div class="hero-emoji">🪴</div>
+            <div>
+                <h1>Welcome, {{ username }}</h1>
+                <div class="motivational">
+                    Remember: Progress, not perfection. Your mental journey matters every day!
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card pie-section">
+                <h3>Your Mood Summary</h3>
+                {% if pie_chart %}
+                    <img src="data:image/png;base64,{{ pie_chart }}" alt="Mood Pie Chart">
+                {% else %}
+                    <p>No entries yet! Add your first diary entry today 🌱</p>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h3>Total Entries</h3>
+                <p style="font-size:2rem; margin-bottom:4px;">{{ entries|length }}</p>
+                <div style="color:#7ba093;">Entries logged</div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('view_entries') }}" class="btn">View Entries</a>
+            <a href="{{ url_for('add_entry', from_dashboard=1) }}" class="btn">Add Entry</a>
+            <a href="{{ url_for('logout') }}" class="btn logout">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Diary Entry</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f9fafc 0%, #e5f0e7 100%);
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            max-width: 540px;
+            width: 100%;
+            background: #fffdf8;
+            border-radius: 23px;
+            padding: 44px 36px 36px 36px;
+            box-shadow: 0 2px 18px 0 rgba(70, 140, 90, 0.09);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #4b7f69;
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: 600;
+            color: #527064;
+            font-size: 1.07rem;
+            margin-bottom: 9px;
+            align-self: center;
+        }
+
+        input[type="text"], input[type="datetime-local"] {
+            width: 90%;
+            min-width: 150px;
+            background: #f7faf2;
+            border: 1px solid #b7d9bb;
+            border-radius: 11px;
+            padding: 10px 13px;
+            font-size: 1.06rem;
+            font-family: 'Nunito', monospace, 'Segoe UI';
+            margin-bottom: 24px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        textarea {
+            width: 90%;
+            min-width: 200px;
+            height: 120px;
+            background: #f7faf2;
+            border: 1px solid #b7d9bb;
+            border-radius: 13px;
+            padding: 14px;
+            font-size: 1.08rem;
+            color: #375a40;
+            margin: 0 0 28px 0;
+            resize: vertical;
+            font-family: 'Nunito', monospace, 'Segoe UI';
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .info-hint {
+            font-size: 0.98rem;
+            color: #7ea99c;
+            margin-bottom: 14px;
+        }
+
+        .nav-buttons {
+            margin-top: 14px;
+            width: 100%;
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            border: none;
+            color: #245746;
+            font-weight: 600;
+            font-size: 1.09rem;
+            padding: 13px 44px;
+            border-radius: 27px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 2px 7px 0 rgba(120, 170, 130, 0.06);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+            color: #184e3b;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add Diary Entry 📝</h2>
+    <form method="POST" autocomplete="off">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" placeholder="Title" maxlength="150" required>
+        <label for="date">Entry Date & Time:</label>
+        <input type="datetime-local" name="date" id="date"
+               value="{{ datetime.utcnow().strftime('%Y-%m-%dT%H:%M') }}">
+        <span class="info-hint">(Defaults to now, but you can pick or backdate!)</span>
+        <label for="text">Describe your thoughts and feelings:</label>
+        <textarea id="text" name="text" required placeholder="How are you feeling today?"></textarea>
+        <label for="tags">Tags (optional):</label>
+        <input type="text" id="tags" name="tags"
+               placeholder="e.g. school, friend, exam, future"
+               style="
+           width: 90%;
+           min-width: 150px;
+           background: #f7faf2;
+           border: 1px solid #b7d9bb;
+           border-radius: 11px;
+           padding: 10px 13px;
+           font-size: 1.06rem;
+           font-family: 'Nunito', monospace, 'Segoe UI';
+           margin-bottom: 24px;
+           display: block;
+           margin-left: auto;
+           margin-right: auto;
+       ">
+        <span class="info-hint">(Leave empty to let the app auto-generate tags from your text.)</span>
+       <div class="nav-buttons">
+    <button type="submit" class="btn">Save Entry</button>
+
+    {% if from_dashboard %}
+        <a href="{{ url_for('dashboard') }}" class="btn">Cancel</a>
+    {% else %}
+        <a href="{{ url_for('view_entries') }}" class="btn">Cancel</a>
+    {% endif %}
+</div>
+    </form>
+</div>
+</body>
+</html>

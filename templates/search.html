@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Entries</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9fafc 0%, #e5f0e7 100%);
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto 0 auto;
+            background: #fffdf8;
+            border-radius: 25px;
+            padding: 26px 26px 28px 26px;
+            box-shadow: 0 2px 18px 0 rgba(70, 140, 90, 0.09);
+        }
+
+        h2 {
+            font-weight: 700;
+            color: #3c5b4b;
+            margin-bottom: 16px;
+        }
+
+        .search-form {
+            margin-bottom: 18px;
+        }
+
+        .search-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px 32px;
+            margin-bottom: 18px;
+        }
+
+        .search-row .field {
+            flex: 1 1 240px;
+            max-width: 280px;
+        }
+
+
+        .search-row.dates {
+            max-width: 520px;
+            margin: 4px auto 20px auto;
+        }
+
+        label {
+            font-size: 0.95rem;
+            color: #527064;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .search-form input[type="text"],
+        .search-form input[type="date"],
+        .search-form select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #b7d9bb;
+            background: #f7faf2;
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            margin-top: 2px;
+        }
+
+        .search-actions {
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 10px;
+        }
+
+        .btn-search {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            border: none;
+            color: #245746;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 0;
+            border-radius: 24px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .btn-search:hover {
+            background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+            color: #184e3b;
+        }
+
+        .entry-list {
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f5faed;
+            border-radius: 17px;
+            box-shadow: 0 1px 8px rgba(120, 183, 160, 0.07);
+            padding: 25px 19px 17px 19px;
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: #3b5b4d;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 13px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-date {
+            color: #7ea99c;
+            font-size: 1.03rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 11px;
+            font-size: 0.93rem;
+            color: #fff;
+            margin: 2px 5px 2px 0;
+        }
+
+        .badge.mood-badge {
+            background: #fff2db;
+            color: #b18424;
+            border: 1.5px solid #ffe1a7;
+            font-size: 1.02rem;
+            font-weight: 600;
+        }
+
+        .badge.tag-badge {
+            background: #c8c6ff;
+            color: #564897;
+            font-size: 0.91rem;
+            font-weight: 600;
+            border-radius: 14px;
+            padding: 5px 11px;
+        }
+
+        .entry-text {
+            font-size: 1.08rem;
+            color: #4b6b5d;
+            margin: 17px 0 4px 0;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        .nav-buttons {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .btn-nav {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            border: none;
+            color: #245746;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 10px 28px;
+            border-radius: 27px;
+            margin: 6px 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-nav:hover {
+            background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+            color: #184e3b;
+        }
+
+        .card {
+            transition: box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 3px 14px rgba(120, 183, 160, 0.14);
+        }
+
+        .entry-actions {
+            position: absolute;
+            top: 16px;
+            right: 22px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            border: none;
+            cursor: default;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 7px 17px;
+            border-radius: 14px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background: linear-gradient(90deg, #8ac6ee 10%, #a9ebb2 100%);
+            color: #245746;
+        }
+
+        .btn-edit:hover {
+            background: linear-gradient(93deg, #96e5b3 30%, #52c0ee 110%);
+            color: #184e3b;
+        }
+
+
+        .btn-delete {
+            background: linear-gradient(90deg, #f89e9e 60%, #fad0c4 100%);
+            color: #984b4b;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(93deg, #f7847d 50%, #ffe7e3 110%);
+            color: #d11b1b;
+        }
+
+        .modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 2222;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(120, 183, 160, 0.20);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-bg.show {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 6px 34px 0 rgba(120, 183, 160, 0.18);
+            max-width: 330px;
+            padding: 40px 28px 23px 28px;
+            text-align: center;
+            color: #333;
+        }
+
+        .modal-card h3 {
+            margin-bottom: 16px;
+            color: #b95337;
+            font-size: 1.22rem;
+            font-weight: 700;
+        }
+
+        .modal-btns {
+            margin-top: 21px;
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        .modal-btn {
+            padding: 11px 32px;
+            font-size: 1.04rem;
+            border-radius: 23px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background: linear-gradient(93deg, #f7faf2 30%, #dadada 110%);
+            color: #527064;
+        }
+
+        .modal-btn-delete {
+            background: linear-gradient(90deg, #f89e9e 40%, #fad0c4 100%);
+            color: #984b4b;
+        }
+
+        .modal-btn-delete:hover {
+            background: linear-gradient(93deg, #f7847d 70%, #ffe7e3 110%);
+            color: #d11b1b;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e5f0e7;
+        }
+                       .pagination {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.98rem;
+        }
+
+        .pagination .page-link {
+            display: inline-block;
+            margin: 0 3px;
+            padding: 7px 14px;
+            border-radius: 18px;
+            background: #e0efe6;
+            color: #375a40;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .pagination .page-link.active {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            color: #245746;
+        }
+
+        .pagination .page-link.dotted {
+            background: transparent;
+            color: #7ea99c;
+            cursor: default;
+        }
+
+        .pagination .page-link:hover:not(.active):not(.dotted) {
+            background: #c6e3d4;
+        }
+
+        .jump-form {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 12px;
+            gap: 4px;
+            font-size: 0.9rem;
+            color: #7ea99c;
+        }
+
+        .jump-input {
+            width: 50px;
+            padding: 4px 6px;
+            border-radius: 12px;
+            border: 1px solid #b7d9bb;
+            font-size: 0.9rem;
+            text-align: center;
+            background: #f7faf2;
+        }
+
+        .jump-btn {
+            background: #e0efe6;
+            border: none;
+            border-radius: 14px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #375a40;
+            cursor: pointer;
+        }
+
+        .jump-btn:hover {
+            background: #c6e3d4;
+        }
+
+        .jump-total {
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="modal-bg" id="modal-bg">
+    <div class="modal-card">
+        <h3>Delete Entry?</h3>
+        <div>Are you sure you want to permanently delete this entry?</div>
+        <div class="modal-btns">
+            <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button class="modal-btn modal-btn-delete" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2>Search Your Entries</h2>
+    <form method="GET" class="search-form">
+        <div class="search-row">
+            <div class="field">
+                <label for="keyword">Keyword</label>
+                <input type="text" id="keyword" name="keyword" value="{{ keyword }}">
+            </div>
+            <div class="field">
+                <label for="tags">Tags (comma separated)</label>
+                <input type="text" id="tags" name="tags" value="{{ tag_text }}">
+            </div>
+            <div class="field">
+                <label for="mood">Mood</label>
+                <select id="mood" name="mood">
+                    <option value="all" {% if mood == 'all' %}selected{% endif %}>Choose mood</option>
+                    <option value="joyful" {% if mood == 'joyful' %}selected{% endif %}>😀 Joyful</option>
+                    <option value="sad" {% if mood == 'sad' %}selected{% endif %}>😢 Sad</option>
+                    <option value="angry" {% if mood == 'angry' %}selected{% endif %}>😡 Angry</option>
+                    <option value="fearful" {% if mood == 'fearful' %}selected{% endif %}>😨 Fearful</option>
+                    <option value="excited" {% if mood == 'excited' %}selected{% endif %}>🤩 Excited</option>
+                    <option value="calm" {% if mood == 'calm' %}selected{% endif %}>😐 Calm</option>
+                    <option value="neutral" {% if mood == 'neutral' %}selected{% endif %}>⚪ Neutral</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-row dates">
+            <div class="field">
+                <label for="date_from">From date</label>
+                <input type="date" id="date_from" name="date_from" value="{{ date_from }}">
+            </div>
+            <div class="field">
+                <label for="date_to">To date</label>
+                <input type="date" id="date_to" name="date_to" value="{{ date_to }}">
+            </div>
+        </div>
+
+        <div class="search-actions">
+            <button type="submit" class="btn-search">Search</button>
+        </div>
+    </form>
+
+    <div class="entry-list">
+        {% if entries %}
+            {% for e in entries %}
+                <div class="card"
+                     onclick="window.location='{{ url_for(
+         'view_entry',
+         entry_id=e.id,
+         from_search=1,
+         keyword=keyword,
+         tags=tag_text,
+         mood=mood,
+         date_from=date_from,
+         date_to=date_to,
+         page=pagination.page if pagination else 1
+     ) }}'">
+                    <div class="card-title">{{ e.title }}</div>
+
+                    <div class="card-meta">
+                        {% if e.mood == 'joyful' %}
+                            <span class="badge mood-badge">😀 Joyful</span>
+                        {% elif e.mood == 'sad' %}
+                            <span class="badge mood-badge">😢 Sad</span>
+                        {% elif e.mood == 'angry' %}
+                            <span class="badge mood-badge">😡 Angry</span>
+                        {% elif e.mood == 'fearful' %}
+                            <span class="badge mood-badge">😨 Fearful</span>
+                        {% elif e.mood == 'excited' %}
+                            <span class="badge mood-badge">🤩 Excited</span>
+                        {% elif e.mood == 'calm' %}
+                            <span class="badge mood-badge">😐 Calm</span>
+                        {% else %}
+                            <span class="badge mood-badge">⚪ Neutral</span>
+                        {% endif %}
+
+                        <span class="card-date">
+                        {{ e.date_created.strftime('%b %d, %Y %I:%M %p') }} 🗓️
+                    </span>
+
+                        {% if e.tags %}
+                            {% for tag in e.tags.split(',') %}
+                                {% set clean_tag = tag.strip().lstrip('#') %}
+                                {% if clean_tag %}
+                                    <span class="badge tag-badge">#{{ clean_tag }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="entry-text">
+                        {{ e.text[:160] }}{% if e.text|length > 160 %}...{% endif %}
+                    </div>
+
+                    <div class="entry-actions">
+                        <a href="{{ url_for('edit_entry', entry_id=e.id) }}"
+                           class="btn-edit"
+                           onclick="event.stopPropagation();">
+                            Edit
+                        </a>
+                        <button type="button"
+                                class="btn-delete"
+                                onclick="event.stopPropagation(); openDeleteModal('{{ e.id }}')">
+                            Delete
+                        </button>
+                        <form id="delete-form-{{ e.id }}"
+                              method="POST"
+                              action="{{ url_for('delete_entry', entry_id=e.id) }}"
+                              style="display:none;"></form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% elif has_searched %}
+        <p style="color:#6e9d75; margin-top:10px;">
+            No entries match your search yet. Try adjusting filters.
+        </p>
+        {% endif %}
+    </div>
+{% if pagination and pagination.pages > 1 %}
+    <div class="pagination">
+
+        {% if pagination.has_prev %}
+            <a class="page-link"
+               href="{{ url_for('search_entries',
+                                page=pagination.prev_num,
+                                keyword=keyword,
+                                tags=tag_text,
+                                mood=mood,
+                                date_from=date_from,
+                                date_to=date_to) }}">
+                «
+            </a>
+        {% endif %}
+
+        {% for p in page_window %}
+            {% if p == '...' %}
+                <span class="page-link dotted">…</span>
+            {% elif p == pagination.page %}
+                <span class="page-link active">{{ p }}</span>
+            {% else %}
+                <a class="page-link"
+                   href="{{ url_for('search_entries',
+                                    page=p,
+                                    keyword=keyword,
+                                    tags=tag_text,
+                                    mood=mood,
+                                    date_from=date_from,
+                                    date_to=date_to) }}">
+                    {{ p }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if pagination.has_next %}
+            <a class="page-link"
+               href="{{ url_for('search_entries',
+                                page=pagination.next_num,
+                                keyword=keyword,
+                                tags=tag_text,
+                                mood=mood,
+                                date_from=date_from,
+                                date_to=date_to) }}">
+                Next »
+            </a>
+        {% endif %}
+
+        <form method="get"
+              action="{{ url_for('search_entries') }}"
+              class="jump-form">
+            <input type="hidden" name="keyword"   value="{{ keyword }}">
+            <input type="hidden" name="tags"      value="{{ tag_text }}">
+            <input type="hidden" name="mood"      value="{{ mood }}">
+            <input type="hidden" name="date_from" value="{{ date_from }}">
+            <input type="hidden" name="date_to"   value="{{ date_to }}">
+
+            <span class="jump-label">Go to</span>
+            <input type="number"
+                   name="page"
+                   min="1"
+                   max="{{ pagination.pages }}"
+                   class="jump-input">
+            <button type="submit" class="jump-btn">Go</button>
+            <span class="jump-total">/ {{ pagination.pages }}</span>
+        </form>
+    </div>
+{% endif %}
+    <div class="nav-buttons">
+        <a href="{{ url_for('view_entries') }}" class="btn-nav">Back to Entries</a>
+        <a href="{{ url_for('dashboard') }}" class="btn-nav">Back to Dashboard</a>
+    </div>
+</div>
+<script>
+    let toDeleteId = null;
+
+    function openDeleteModal(entryId) {
+        toDeleteId = entryId;
+        document.getElementById('modal-bg').classList.add('show');
+    }
+
+    function closeDeleteModal() {
+        toDeleteId = null;
+        document.getElementById('modal-bg').classList.remove('show');
+    }
+
+    function confirmDelete() {
+        if (toDeleteId !== null) {
+            document.getElementById('delete-form-' + toDeleteId).submit();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalBg = document.getElementById('modal-bg');
+        if (modalBg) {
+            modalBg.addEventListener('click', function (e) {
+                if (e.target === modalBg) {
+                    closeDeleteModal();
+                }
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    closeDeleteModal();
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

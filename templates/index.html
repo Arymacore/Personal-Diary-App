@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Personal Diary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+      html, body {
+          height: 100%;
+          margin: 0;
+      }
+      body {
+          font-family: 'Nunito', sans-serif;
+          background: linear-gradient(135deg, #f9fafc 0%, #e5f0e7 100%);
+          color: #333;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+      }
+      .main-card {
+          background: #fffdf8;
+          border-radius: 23px;
+          box-shadow: 0 2px 18px 0 rgba(70,140,90,0.09);
+          padding: 56px 42px 46px 42px;
+          text-align: center;
+          max-width: 430px;
+          width: 97vw;
+      }
+      h1 {
+          font-weight: 700;
+          font-size: 2.42rem;
+          color: #457458;
+          letter-spacing: 1.1px;
+          margin-bottom: 13px;
+      }
+      p {
+          font-size: 1.17rem;
+          margin-bottom: 33px;
+          color: #4b6b5d;
+      }
+      .btn {
+          display: inline-block;
+          font-weight: 600;
+          font-size: 1.17rem;
+          letter-spacing: 1px;
+          padding: 13px 44px;
+          border-radius: 24px;
+          margin: 0 10px 0 10px;
+          text-decoration: none;
+          transition: background 0.22s, color 0.22s;
+          cursor: pointer;
+      }
+      .btn-signup {
+          background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+          color: #245746;
+          border: none;
+      }
+      .btn-signup:hover {
+          background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+          color: #184e3b;
+      }
+      .btn-login {
+          background: linear-gradient(90deg, #88d8b0 40%, #8ac6ee 100%);
+          color: #245746;
+          border: none;
+      }
+      .btn-login:hover {
+          background: linear-gradient(87deg, #76c69b 50%, #62b6e8 140%);
+          color: #184e3b;
+      }
+  </style>
+</head>
+<body>
+  <div class="main-card">
+    <h1>Welcome to Personal Diary <span style="font-size:2.0rem;">🌿</span></h1>
+    <p>Your private, comforting space to reflect, write, and grow with your thoughts.</p>
+    <a href="{{ url_for('signup') }}" class="btn btn-signup">Sign Up</a>
+    <a href="{{ url_for('login') }}" class="btn btn-login">Login</a>
+  </div>
+</body>
+</html>

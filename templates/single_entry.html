@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ entry.title }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9fafc 0%, #e5f0e7 100%);
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+        .page-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 18px 40px 18px;
+        }
+        .entry-card {
+            border-radius: 25px;
+            box-shadow: 0 2px 18px 0 rgba(70,140,90,0.09);
+            overflow: hidden;
+        }
+
+        .entry-top {
+            background: #f5faed;
+            padding: 26px 26px 20px 26px;
+        }
+        .page-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #3c5b4b;
+            margin-bottom: 14px;
+        }
+        .entry-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3b5b4d;
+            margin-bottom: 6px;
+        }
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .date-text {
+            color: #7ea99c;
+            font-size: 1.02rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 11px;
+            font-size: 0.93rem;
+            margin: 2px 5px 2px 0;
+        }
+        .badge.mood-badge {
+            background: #fff2db;
+            color: #b18424;
+            border: 1.5px solid #ffe1a7;
+            font-weight: 600;
+        }
+        .badge.tag-badge {
+            background: #c8c6ff;
+            color: #564897;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 14px;
+            padding: 5px 11px;
+        }
+        .tags-row {
+            margin-bottom: 6px;
+        }
+
+        .entry-bottom {
+            background: #fffdf8;
+            padding: 22px 26px 26px 26px;
+        }
+        .entry-text {
+            font-size: 1.1rem;
+            color: #4b6b5d;
+            white-space: pre-line;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+        .actions {
+            margin-top: 24px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #a9ebb2 40%, #8ac6ee 100%);
+            border: none;
+            color: #245746;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 32px;
+            border-radius: 27px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 2px 7px 0 rgba(120,170,130,0.06);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn:hover {
+            background: linear-gradient(87deg, #96e5b3 50%, #52c0ee 140%);
+            color: #184e3b;
+        }
+
+        @media (max-width: 768px) {
+            .entry-top,
+            .entry-bottom {
+                padding: 20px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-wrapper">
+    <div class="entry-card">
+        <div class="entry-top">
+            <div class="page-title">Entry Detail</div>
+
+            <div class="entry-title">{{ entry.title }}</div>
+
+            <div class="meta-row">
+                {% if entry.mood == 'joyful' %}
+                    <span class="badge mood-badge">😀 Joyful</span>
+                {% elif entry.mood == 'sad' %}
+                    <span class="badge mood-badge">😢 Sad</span>
+                {% elif entry.mood == 'angry' %}
+                    <span class="badge mood-badge">😡 Angry</span>
+                {% elif entry.mood == 'fearful' %}
+                    <span class="badge mood-badge">😨 Fearful</span>
+                {% elif entry.mood == 'excited' %}
+                    <span class="badge mood-badge">🤩 Excited</span>
+                {% elif entry.mood == 'calm' %}
+                    <span class="badge mood-badge">😐 Calm</span>
+                {% else %}
+                    <span class="badge mood-badge">⚪ Neutral</span>
+                {% endif %}
+
+                <span class="date-text">
+                    {{ entry.date_created.strftime('%b %d, %Y %I:%M %p') }} 🗓️
+                </span>
+            </div>
+
+            {% if entry.tags %}
+            <div class="tags-row">
+                {% for tag in entry.tags.split(',') %}
+                    {% set clean_tag = tag.strip().lstrip('#') %}
+                    {% if clean_tag %}
+                        <span class="badge tag-badge">#{{ clean_tag }}</span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- 下半部分：正文 + 返回按钮（奶白色背景） -->
+        <div class="entry-bottom">
+            <div class="entry-text">
+                {{ entry.text }}
+            </div>
+
+            <div class="actions">
+                {% if from_search %}
+    <a href="{{ url_for(
+            'search_entries',
+            keyword=search_params.keyword,
+            tags=search_params.tags,
+            mood=search_params.mood,
+            date_from=search_params.date_from,
+            date_to=search_params.date_to,
+            page=search_params.page,
+            from_search=1
+        ) }}" class="btn back-btn">
+        Back to Search
+    </a>
+{% else %}
+    <a href="{{ url_for('view_entries') }}" class="btn back-btn">
+        Back to Entries
+    </a>
+{% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
