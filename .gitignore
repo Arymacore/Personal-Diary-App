@@ -1,5 +1,14 @@
+# Ignore OS files
+.DS_Store
+
+# Ignore IDE/project files
+.idea/
+*.iml
+
+# Ignore database
+diary.db
+
+# Ignore virtual environment (if any)
+venv/
 __pycache__/
 *.pyc
-.env
-*.sqlite3
-*.log
